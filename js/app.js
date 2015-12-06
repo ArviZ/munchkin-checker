@@ -49,4 +49,7 @@
 	});
 
 	window.munchkins = new unitPlayer;
+	MK.on(munchkins, 'click::(#touchMe)', function() {
+		munchkins.push({});
+	});
 })(window)
