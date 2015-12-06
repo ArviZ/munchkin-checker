@@ -1,4 +1,7 @@
 (function(window) {
+	var ENTER_KEY = 13;
+	var ESC_KEY = 27;
+
 	var Player = Class({
 		'extends': MK.Object,
 		constructor: function(data) {
@@ -10,8 +13,34 @@
 					runAway: 0,
 				})
 				.set(data)
-				.on('click::deleteButton', function() {
-					this.trigger('destroyThisPlayer', this);
+				.on('render', function(evt) {
+					this
+						.bindNode({
+							edit: ':sandbox .edit',
+						})
+						.bindNode('editing', ':sandbox', MK.binders.className('editing'))
+						.on('click::deleteButton', function() {
+							this.trigger('destroyThisPlayer', this);
+						})
+						.on('dblclick::name', function() {
+							this.editing = true;
+							this.edit = this.name;
+							this.$bound( 'edit' ).focus();
+						})
+						.on('keyup::edit', function(evt) {
+							var editValue;
+							if( evt.which === ESC_KEY ) {
+								this.editing = false;
+							} else if( evt.which === ENTER_KEY ) {
+								if( editValue = this.edit.trim() ) {
+									this.name = editValue;
+									this.editing = false;
+								} else {
+									this.trigger('destroyThisPlayer', this);
+								}
+							}
+						})
+					;
 				})
 			;
 		},
