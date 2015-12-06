@@ -2,13 +2,18 @@
 	var Player = Class({
 		'extends': MK.Object,
 		constructor: function(data) {
-			this.jset({
-				name: 'Player',
-				level: 1,
-				damage: 1,
-				runAway: 0,
-			})
-			this.set(data)
+			this
+				.jset({
+					name: 'Player',
+					level: 1,
+					damage: 1,
+					runAway: 0,
+				})
+				.set(data)
+				.on('click::deleteButton', function() {
+					this.trigger('destroyThisPlayer', this);
+				})
+			;
 		},
 		onRender: function() {
 			this
@@ -16,7 +21,8 @@
 					name: ':sandbox .playerName',
 					level: ':sandbox .level',
 					damage: ':sandbox .damage',
-					runAway: ':sandbox .runAway'
+					runAway: ':sandbox .runAway',
+					deleteButton: ':sandbox .delete'
 				}, MK.binders.html())
 			;
 		}
@@ -34,7 +40,10 @@
 			;
 		},
 		bindings: function() {
-			return this.bindNode('sandbox', '.unitPlayer');
+			return this
+				.bindNode('sandbox', '.playersList')
+				.bindNode('addButton', '.add')
+			;
 		},
 		events: function() {
 			return this
@@ -44,12 +53,15 @@
 				.on('modify @change:name @change:level @change:damage @change:runAway', function() {
 					this.JSON = JSON.stringify(this);
 				})
+				.on('@destroyThisPlayer', function(player) {
+					this.pull(player);
+				})
 			;
 		},
 	});
 
 	window.munchkins = new unitPlayer;
-	MK.on(munchkins, 'click::(#touchMe)', function() {
+	MK.on(munchkins, 'click::addButton', function() {
 		munchkins.push({});
 	});
 })(window)

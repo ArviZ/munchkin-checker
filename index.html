@@ -8,15 +8,23 @@
 </head>
 <body>
 	<script type="text/html" id="playerTemplate">
-		<div class="row">
-			<div class="col-xs-6 playerName"></div>
-			<div class="col-xs-2 level"></div>
-			<div class="col-xs-2 damage"></div>
-			<div class="col-xs-2 runAway"></div>
+		<div class="row players">
+			<div class="col-xs-8 playerName"></div>
+			<div class="col-xs-1 text-center level"></div>
+			<div class="col-xs-1 text-center damage"></div>
+			<div class="col-xs-1 text-center runAway"></div>
+			<div class="col-xs-1 text-center">
+				<button class="btn btn-xs btn-danger delete">&times;</button>
+			</div>
 		</div>
 	</script>
-	<div class="container unitPlayer">
-		<button id="touchMe">Нажми на меня, игрок!</button>
+	<div class="container">
+		<div class="playersList"></div>
+		<div class="row">
+			<div class="menu">
+				<button class="btn btn-success add">Добавить игрока</button>
+			</div>
+		</div>
 	</div>
 	<script src="js/matreshka.js"></script>
 	<script src="js/app.js"></script>
