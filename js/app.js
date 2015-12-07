@@ -19,22 +19,26 @@
 							edit: ':sandbox .edit',
 						})
 						.bindNode('editing', ':sandbox', MK.binders.className('editing'))
+						.bindNode('noselect', ':sandbox', MK.binders.className('noselect'))
 						.on('click::deleteButton', function() {
 							this.trigger('destroyThisPlayer', this);
 						})
 						.on('dblclick::name', function() {
+							this.noselect = true;
 							this.editing = true;
 							this.edit = this.name;
-							this.$bound( 'edit' ).focus();
+							this.$bound('edit').focus();
 						})
 						.on('keyup::edit', function(evt) {
 							var editValue;
 							if( evt.which === ESC_KEY ) {
+								this.noselect = false;
 								this.editing = false;
 							} else if( evt.which === ENTER_KEY ) {
 								if( editValue = this.edit.trim() ) {
 									this.name = editValue;
 									this.editing = false;
+									this.noselect = false;
 								} else {
 									this.trigger('destroyThisPlayer', this);
 								}
@@ -71,13 +75,16 @@
 		bindings: function() {
 			return this
 				.bindNode('sandbox', '.playersList')
-				.bindNode('addButton', '.add')
+				.bindNode('addButton', '.add');
 			;
 		},
 		events: function() {
 			return this
 				.onDebounce('change:JSON', function(evt) {
 					localStorage['players'] = evt.value;
+				})
+				.on('click::addButton', function(player) {
+					this.push(player);
 				})
 				.on('modify @change:name @change:level @change:damage @change:runAway', function() {
 					this.JSON = JSON.stringify(this);
@@ -90,7 +97,4 @@
 	});
 
 	window.munchkins = new unitPlayer;
-	MK.on(munchkins, 'click::addButton', function() {
-		munchkins.push({});
-	});
 })(window)
