@@ -27,7 +27,7 @@
 							this.noselect = true;
 							this.editing = true;
 							this.edit = this.name;
-							this.$bound('edit').focus();
+							this.bound('edit').focus();
 						})
 						.on('keyup::edit', function(evt) {
 							var editValue;
